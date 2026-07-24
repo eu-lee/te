@@ -1,21 +1,42 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
- 
-int main() {
+#include <string>
+#include <fstream>
+
+using std::string;
+using std::ifstream;
+
+
+string load_file(const string& path){
+  string contents = "";
+
+  ifstream file(path);
+
+  string line = "";
+  while(std::getline(file,line)){
+    contents += line + "\n";
+  }
+
+  return contents;
+}
+
+
+int main(int argc, char* argv[]) {
+
+  string fileLocation = argv[1];
+
+  string fileContents = load_file(fileLocation);
+
+
   using namespace ftxui;
  
   // Define the document structure
   Element document = vbox({
-    text("FTXUI Getting Started") | bold | center,
+    text("Eugene's Text Editor") | bold | center,
     separator(),
-    hbox({
-      text("Left Panel") | border,
       vbox({
-        text("Main Content Area") | flex,
-        separator(),
-        text("Footer Information") | dim,
+        text(fileContents) | flex,
       }) | border | flex,
-    }) | flex,
   });
  
   // Create the screen and render
