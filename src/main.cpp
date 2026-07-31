@@ -15,17 +15,47 @@ using std::string;
 using std::ifstream;
 
 
-string load_file(const string& path){
-  string contents = "";
+struct Document{
+  std::string contents;
+};
+
+
+Document load_file(const string& path){
 
   ifstream file(path);
 
+  if (!file) {
+    throw std::runtime_error("Could not open file: " + path);
+  }
+
+  Document document;
+
+  string contents = "";
+  
   string line = "";
   while(std::getline(file,line)){
     contents += line + "\n";
   }
 
-  return contents;
+  document.contents = contents;
+
+  return document;
+}
+
+
+ftxui::Elements render_document(const Document& document){
+
+  ftxui::Elements output;
+
+  std::stringstream stream(document.contents);
+
+  string line;
+
+  while(std::getline(stream, line)){
+    output.push_back(ftxui::text(line));
+  }
+
+  return output;
 }
 
 // main render
@@ -39,17 +69,10 @@ int main(int argc, char* argv[]) {
   using namespace ftxui;
 
   string fileLocation = argv[1];
-  string fileContents = load_file(fileLocation);
+  
+  Document fileContents = load_file(fileLocation);
 
   auto editor = Renderer([&] {
-    Elements lines;
-
-    std::stringstream stream(fileContents);
-    string line;
-
-    while (std::getline(stream, line)) {
-      lines.push_back(text(line));
-    }
 
     return vbox({
       text("Eugene's Text Editor")
@@ -59,7 +82,7 @@ int main(int argc, char* argv[]) {
 
       separator(),
 
-      vbox(std::move(lines))
+      vbox(std::move(render_document(fileContents)))
           | border
           | flex,
     });
