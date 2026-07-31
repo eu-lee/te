@@ -1,6 +1,6 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
-#include "ftxui/screen/color.hpp"
+#include <ftxui/screen/color.hpp>
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 using std::string;
 using std::ifstream;
@@ -70,7 +71,17 @@ int main(int argc, char* argv[]) {
 
   string fileLocation = argv[1];
   
-  Document fileContents = load_file(fileLocation);
+  Document fileContents;
+
+  try{
+    fileContents = load_file(fileLocation);
+  }
+  catch(const std::runtime_error &e){
+    std::cerr << e.what() <<"\n";
+    return 1;
+  }
+
+  
 
   auto editor = Renderer([&] {
 
