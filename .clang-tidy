@@ -1,0 +1,12 @@
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  modernize-*,
+  cppcoreguidelines-*
+
+WarningsAsErrors: ""
+
+HeaderFilterRegex: "^(src|include)/"
+FormatStyle: file
