@@ -25,6 +25,7 @@ te
 # Vim swap files
 *.swp
 *.swo
+*.un~
 
 # VScode settings
 
