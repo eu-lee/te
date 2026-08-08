@@ -1,52 +1,16 @@
+#include "document.h"
+
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
-
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
-#include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <stdexcept>
 
 using std::string;
 using std::ifstream;
-
-struct Cursor{
-  size_t row = 0;
-  size_t col = 0;
-};
-
-struct Document{
-  std::string contents;
-  Cursor cursor;
-};
-
-
-Document load_file(const string& path){
-
-  ifstream file(path);
-
-  if (!file) {
-    throw std::runtime_error("Could not open file: " + path);
-  }
-
-  Document document;
-
-  string contents = "";
-  
-  string line = "";
-  while(std::getline(file,line)){
-    contents += line + "\n";
-  }
-
-  document.contents = contents;
-
-  return document;
-}
 
 
 ftxui::Elements render_document(const Document& document){
@@ -64,43 +28,6 @@ ftxui::Elements render_document(const Document& document){
   return output;
 }
 
-size_t get_line_length(const Document& document, size_t row){
-  size_t curLineNum = 0;
-  size_t curLineLength = 0;
-
-  for(char c : document.contents){
-
-    if(curLineNum == row){
-      if(c == '\n'){
-        return curLineLength;
-      }
-
-      curLineLength++;
-      continue;
-    }
-
-    if(c == '\n'){
-      curLineNum++;
-    }
-
-  }
-
-  if(curLineNum == row){
-    return curLineLength;
-  }
-  return 0;
-}
-
-size_t get_line_count(const Document & document){
-  size_t numLines = 0;
-  for( char c : document.contents){
-    if(c == '\n'){
-      numLines++;
-    }
-  }
-
-  return numLines;
-}
 
 // main render
 int main(int argc, char* argv[]) {
@@ -141,7 +68,7 @@ int main(int argc, char* argv[]) {
           text("row: " + std::to_string(fileContents.cursor.row)),
           text("col: " + std::to_string(fileContents.cursor.col)),
         }),
-        
+
       separator(),
 
       vbox(std::move(render_document(fileContents)))
