@@ -7,10 +7,12 @@
 #include <ftxui/component/event.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
+#include <algorithm>
 #include <iostream>
-
+#include <sstream>
+#include <stdexcept>
+#include <string>
 using std::string;
-using std::ifstream;
 
 
 ftxui::Elements render_document(const Document& document){
