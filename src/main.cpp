@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
       
       size_t numLines = get_line_count(fileContents);
 
-      if(fileContents.cursor.row < numLines){
+      if(fileContents.cursor.row + 1< numLines){
         fileContents.cursor.row++;
       }
 
