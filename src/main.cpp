@@ -15,9 +15,14 @@
 using std::string;
 using std::ifstream;
 
+struct Cursor{
+  size_t row = 0;
+  size_t col = 0;
+};
 
 struct Document{
   std::string contents;
+  Cursor cursor;
 };
 
 
@@ -59,6 +64,44 @@ ftxui::Elements render_document(const Document& document){
   return output;
 }
 
+size_t get_line_length(const Document& document, size_t row){
+  size_t curLineNum = 0;
+  size_t curLineLength = 0;
+
+  for(char c : document.contents){
+
+    if(curLineNum == row){
+      if(c == '\n'){
+        return curLineLength;
+      }
+
+      curLineLength++;
+      continue;
+    }
+
+    if(c == '\n'){
+      curLineNum++;
+    }
+
+  }
+
+  if(curLineNum == row){
+    return curLineLength;
+  }
+  return 0;
+}
+
+size_t get_line_count(const Document & document){
+  size_t numLines = 0;
+  for( char c : document.contents){
+    if(c == '\n'){
+      numLines++;
+    }
+  }
+
+  return numLines;
+}
+
 // main render
 int main(int argc, char* argv[]) {
 
@@ -93,9 +136,19 @@ int main(int argc, char* argv[]) {
 
       separator(),
 
+      vbox({
+          text("Current cursor location"),
+          text("row: " + std::to_string(fileContents.cursor.row)),
+          text("col: " + std::to_string(fileContents.cursor.col)),
+        }),
+        
+      separator(),
+
       vbox(std::move(render_document(fileContents)))
           | border
           | flex,
+
+        
     });
 
 
@@ -108,6 +161,52 @@ int main(int argc, char* argv[]) {
   editor |= CatchEvent([&](Event event) {
     if (event == Event::CtrlC) {
       screen.Exit();
+      return true;
+    }
+
+    if (event == Event::ArrowLeft) {
+      if(fileContents.cursor.col >0){
+        fileContents.cursor.col--;
+      }
+
+      return true;
+    }
+
+    if (event == Event::ArrowRight){
+
+      size_t lineLength = get_line_length(fileContents, fileContents.cursor.row);
+
+      if(fileContents.cursor.col < lineLength){
+        fileContents.cursor.col++;
+      }
+
+      return true;
+    }
+
+    if (event == Event::ArrowUp){
+
+      if(fileContents.cursor.row >0){
+        fileContents.cursor.row--;
+      }
+
+      fileContents.cursor.col = std::min(fileContents.cursor.col,
+        get_line_length(fileContents, fileContents.cursor.row));
+
+      return true;
+    }
+
+    if (event == Event::ArrowDown){
+      
+      size_t numLines = get_line_count(fileContents);
+
+      if(fileContents.cursor.row < numLines){
+        fileContents.cursor.row++;
+      }
+
+      fileContents.cursor.col = std::min(fileContents.cursor.col,
+        get_line_length(fileContents, fileContents.cursor.row));
+
+
       return true;
     }
 
