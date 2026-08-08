@@ -1,9 +1,7 @@
 #include "document.h"
 
-#include <algorithm>
 #include <fstream>
-#include <iostream>
-#include <sstream>
+#include <stdexcept>
 #include <string>
 
 Document load_file(const std::string& path){
