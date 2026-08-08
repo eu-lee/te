@@ -18,6 +18,7 @@ FetchContent_MakeAvailable(ftxui)
 
 add_executable(te
     src/main.cpp
+    src/document.cpp
 )
 
 target_link_libraries(te PRIVATE
