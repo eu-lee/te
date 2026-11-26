@@ -23,8 +23,20 @@ ftxui::Elements render_document(const Document& document){
 
     string line;
 
-    while(std::getline(stream, line)){
-        output.push_back(ftxui::text(line));
+    int curRow = 0;
+
+    while (std::getline(stream,line)){
+
+        if(curRow == document.cursor.row){
+            line.insert(document.cursor.col, "|");
+            output.push_back(ftxui::text(line));
+        }
+        else{
+            output.push_back(ftxui::text(line));
+        }
+
+        curRow++;
+
     }
 
     return output;

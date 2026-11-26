@@ -86,6 +86,10 @@ void insert_at(Document & document, const std::string& textInput){
 
         if(curRow == targetRow && curCol == targetCol){
             document.contents.insert(pos+1, textInput);
+
+            //after insertion advance cursor once forward
+
+            document.cursor.col++;
         }
     }
     return;
