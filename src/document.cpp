@@ -6,61 +6,86 @@
 
 Document load_file(const std::string& path){
 
-  std::ifstream file(path);
+    std::ifstream file(path);
 
-  if (!file) {
-    throw std::runtime_error("Could not open file: " + path);
-  }
+    if (!file) {
+        throw std::runtime_error("Could not open file: " + path);
+    }
 
-  Document document;
+    Document document;
 
-  std::string contents = "";
-  
-  std::string line = "";
-  while(std::getline(file,line)){
-    contents += line + "\n";
-  }
+    std::string contents = "";
 
-  document.contents = contents;
+    std::string line = "";
+    while(std::getline(file,line)){
+        contents += line + "\n";
+    }
 
-  return document;
+    document.contents = contents;
+
+    return document;
 }
 
 
 size_t get_line_length(const Document& document, size_t row){
-  size_t curLineNum = 0;
-  size_t curLineLength = 0;
+    size_t curLineNum = 0;
+    size_t curLineLength = 0;
 
-  for(char c : document.contents){
+    for(char c : document.contents){
+
+        if(curLineNum == row){
+            if(c == '\n'){
+                return curLineLength;
+            }
+
+            curLineLength++;
+            continue;
+        }
+
+        if(c == '\n'){
+            curLineNum++;
+        }
+
+    }
 
     if(curLineNum == row){
-      if(c == '\n'){
         return curLineLength;
-      }
-
-      curLineLength++;
-      continue;
     }
-
-    if(c == '\n'){
-      curLineNum++;
-    }
-
-  }
-
-  if(curLineNum == row){
-    return curLineLength;
-  }
-  return 0;
+    return 0;
 }
 
 size_t get_line_count(const Document & document){
-  size_t numLines = 0;
-  for( char c : document.contents){
-    if(c == '\n'){
-      numLines++;
+    size_t numLines = 0;
+    for( char c : document.contents){
+        if(c == '\n'){
+            numLines++;
+        }
     }
-  }
 
-  return numLines;
+    return numLines;
+}
+
+Document insert_at(const Document & document, const int & targetRow, const int & targetCol){
+    std::string cur = document.contents;
+    std::string updatedContents = document.contents;
+
+    int curRow = 0;
+    int curCol = 0;
+
+    for(size_t pos = 0; pos < cur.size(); pos++){
+        if(cur[pos] == '\n'){
+            curRow++;
+            curCol = 0;
+        }
+        else{
+            curCol++;
+        }
+
+        if(curRow == targetRow && curCol == targetCol){
+            updatedContents+=
+        }
+
+    }
+
+
 }

@@ -1,10 +1,10 @@
 Checks: >
-  -*,
-  bugprone-*,
-  performance-*,
-  portability-*,
-  modernize-*,
-  cppcoreguidelines-*
+    -*,
+    bugprone-*,
+    performance-*,
+    portability-*,
+    modernize-*,
+    cppcoreguidelines-*
 
 WarningsAsErrors: ""
 
