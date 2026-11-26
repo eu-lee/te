@@ -140,14 +140,12 @@ int main(int argc, char* argv[]) {
         }
 
         if (event.is_character()){
-            std::string
-            fileContents = insert_at(fileContents,fileContents.cursor.row, fileContents.cursor.col);
-
+            std::string textInput = event.character();
+            insert_at(fileContents, textInput);
         }
 
         else{
 
-            fileContents = insert_at(fileContents,fileContents.cursor.row, fileContents.cursor.col);
             return true;
         }
 

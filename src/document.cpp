@@ -65,15 +65,18 @@ size_t get_line_count(const Document & document){
     return numLines;
 }
 
-Document insert_at(const Document & document, const int & targetRow, const int & targetCol){
-    std::string cur = document.contents;
+void insert_at(Document & document, const std::string& textInput){
+
     std::string updatedContents = document.contents;
+
+    int targetRow = document.cursor.row;
+    int targetCol = document.cursor.col;
 
     int curRow = 0;
     int curCol = 0;
 
-    for(size_t pos = 0; pos < cur.size(); pos++){
-        if(cur[pos] == '\n'){
+    for(size_t pos = 0; pos < document.contents.size(); pos++){
+        if(document.contents[pos] == '\n'){
             curRow++;
             curCol = 0;
         }
@@ -82,10 +85,9 @@ Document insert_at(const Document & document, const int & targetRow, const int &
         }
 
         if(curRow == targetRow && curCol == targetCol){
-            updatedContents+=
+            document.contents.insert(pos+1, textInput);
         }
-
     }
-
-
+    return;
 }
+
