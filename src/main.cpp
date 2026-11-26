@@ -23,20 +23,35 @@ ftxui::Elements render_document(const Document& document){
 
     string line;
 
-    int curRow = 0;
+    size_t curRow = 0;
 
     while (std::getline(stream,line)){
 
-        if(curRow == document.cursor.row){
-            line.insert(document.cursor.col, "|");
-            output.push_back(ftxui::text(line));
+        if (curRow == document.cursor.row) {
+
+            size_t col = document.cursor.col;
+
+            string before = line.substr(0, col);
+            string current = " ";
+            string after = "";
+
+            if (col < line.size()) {
+                current = line.substr(col, 1);
+                after = line.substr(col + 1);
+            }
+
+            output.push_back(ftxui::hbox({
+                ftxui::text(before),
+                ftxui::text(current) | ftxui::focusCursorBarBlinking,
+                ftxui::text(after)
+            }));
+
         }
         else{
             output.push_back(ftxui::text(line));
         }
 
         curRow++;
-
     }
 
     return output;
