@@ -106,7 +106,10 @@ void delete_at(Document & document){
     size_t curRow = 0;
     size_t curCol = 0;
 
-    for(size_t pos = 0; pos < document.contents.size(); pos++){
+    for(size_t pos = 0; pos <= document.contents.size(); pos++){
+        if (pos == document.contents.size()) {
+            break;
+        }
 
         if(curRow == targetRow && curCol == targetCol){
 
@@ -133,7 +136,7 @@ void delete_at(Document & document){
         else{
             curCol++;
         }
-        
+
     }
     return;
 
