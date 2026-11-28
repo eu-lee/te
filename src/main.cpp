@@ -171,6 +171,10 @@ int main(int argc, char* argv[]) {
             insert_at(fileContents, textInput);
         }
 
+        if (event == Event::Backspace || event == Event::Delete){
+            delete_at(fileContents);
+        }
+
         else{
 
             return true;

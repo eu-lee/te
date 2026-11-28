@@ -22,3 +22,5 @@ size_t get_line_length(const Document& document, size_t row);
 size_t get_line_count(const Document & document);
 
 void insert_at(Document & document, const std::string & textInput);
+
+void delete_at(Document & document);
